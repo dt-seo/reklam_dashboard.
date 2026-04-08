@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reklam Gelir Dashboard — Oca–Mar 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #F4F3EF;
+    --surface:  #FFFFFF;
+    --surface2: #EEECE7;
+    --border:   #E0DDD6;
+    --text:     #1A1916;
+    --muted:    #7A7870;
+    --hint:     #B0AEA8;
+    --accent:   #1A1916;
+    --blue:     #2A5FD4;
+    --purple:   #6B5CE7;
+    --green:    #2E8A4A;
+    --teal:     #0F7B6C;
+    --orange:   #C44B1B;
+    --android:  #1D9E75;
+    --ios:      #534AB7;
+    --banner-bg: #EBF2FD;
+    --banner-tx: #1A3D8A;
+    --inter-bg:  #F0EEFE;
+    --inter-tx:  #3C3489;
+    --video-bg:  #E8F5ED;
+    --video-tx:  #1B5E35;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-left h1 {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .header-left p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .header-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 6px;
+    color: var(--muted);
+  }
+
+  /* LAYOUT */
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem 2.5rem 4rem; }
+
+  /* FILTERS */
+  .filters-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .filters-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--hint);
+    margin-bottom: 1rem;
+  }
+  .frow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .frow:last-child { margin-bottom: 0; }
+  .flabel {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    width: 64px;
+    flex-shrink: 0;
+  }
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 5px 13px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.12s;
+    line-height: 1.4;
+  }
+  .btn:hover { background: var(--surface2); color: var(--text); }
+  .bm.on { background: var(--teal);   color: #fff; border-color: var(--teal); }
+  .bb.on { background: var(--text);   color: #fff; border-color: var(--text); }
+  .bf.on { background: var(--purple); color: #fff; border-color: var(--purple); }
+  .bp.on { background: var(--orange); color: #fff; border-color: var(--orange); }
+
+  /* METRIC CARDS */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+  }
+  .card-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .card-value {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .card-sub {
+    font-size: 11px;
+    color: var(--hint);
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* SECTION */
+  .section { margin-bottom: 1.5rem; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--hint);
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* TABLE */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--hint);
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  th.r { text-align: right; }
+  td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+  td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 12px; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+
+  /* BADGES */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .bn { background: var(--banner-bg); color: var(--banner-tx); }
+  .bi { background: var(--inter-bg);  color: var(--inter-tx); }
+  .bv { background: var(--video-bg);  color: var(--video-tx); }
+
+  .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    display: inline-block; margin-right: 5px; vertical-align: middle;
+  }
+  .da { background: var(--android); }
+  .di { background: var(--ios); }
+
+  /* CHARTS */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .chart-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--hint);
+    margin-bottom: 0.75rem;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .li { display: flex; align-items: center; gap: 5px; }
+  .ls { width: 9px; height: 9px; border-radius: 2px; }
+  .cw { position: relative; width: 100%; height: 220px; }
+
+  .empty {
+    text-align: center;
+    padding: 2.5rem;
+    color: var(--hint);
+    font-size: 13px;
+  }
+
+  .brand-strong { font-weight: 500; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 2rem 0 0;
+    font-size: 11px;
+    color: var(--hint);
+    font-family: 'DM Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Reklam Gelir Dashboard</h1>
+    <p>Marka · Platform · Format · Ay bazlı analiz</p>
+  </div>
+  <span class="header-badge">Ocak – Mart 2026</span>
+</div>
+
+<div class="container">
+
+  <!-- FILTERS -->
+  <div class="filters-panel">
+    <p class="filters-title">Filtreler</p>
+    <div class="frow">
+      <span class="flabel">Ay</span>
+      <button class="btn bm on" data-t="month" data-v="all">Tümü</button>
+      <button class="btn bm" data-t="month" data-v="jan">Ocak</button>
+      <button class="btn bm" data-t="month" data-v="feb">Şubat</button>
+      <button class="btn bm" data-t="month" data-v="mar">Mart</button>
+    </div>
+    <div class="frow">
+      <span class="flabel">Marka</span>
+      <button class="btn bb on" data-t="brand" data-v="all">Tümü</button>
+      <button class="btn bb" data-t="brand" data-v="hurriyet">Hürriyet</button>
+      <button class="btn bb" data-t="brand" data-v="milliyet">Milliyet</button>
+      <button class="btn bb" data-t="brand" data-v="fanatik">Fanatik</button>
+      <button class="btn bb" data-t="brand" data-v="posta">Posta</button>
+      <button class="btn bb" data-t="brand" data-v="cnnturk">CNN Türk</button>
+      <button class="btn bb" data-t="brand" data-v="kanald">Kanal D</button>
+    </div>
+    <div class="frow">
+      <span class="flabel">Format</span>
+      <button class="btn bf on" data-t="format" data-v="all">Tümü</button>
+      <button class="btn bf" data-t="format" data-v="banner">Banner</button>
+      <button class="btn bf" data-t="format" data-v="interstitial">Interstitial</button>
+      <button class="btn bf" data-t="format" data-v="video">Video</button>
+    </div>
+    <div class="frow">
+      <span class="flabel">Platform</span>
+      <button class="btn bp on" data-t="platform" data-v="all">Tümü</button>
+      <button class="btn bp" data-t="platform" data-v="android">Android</button>
+      <button class="btn bp" data-t="platform" data-v="ios">iOS</button>
+    </div>
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards" id="cards"></div>
+
+  <!-- TABLE -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Detay tablosu</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Marka</th><th>Platform</th><th>Format</th><th>Ay</th>
+          <th class="r">Toplam Gelir</th><th class="r">ADX Gelir</th>
+          <th class="r">ADX%</th><th class="r">eCPM</th><th class="r">ADX eCPM</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Görsel analiz</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <p class="chart-title">Gelir karşılaştırması (₺)</p>
+        <div class="legend" id="leg1"></div>
+        <div class="cw"><canvas id="c1" role="img" aria-label="Gelir karşılaştırması"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <p class="chart-title">Ortalama eCPM (₺)</p>
+        <div class="legend" id="leg2"></div>
+        <div class="cw"><canvas id="c2" role="img" aria-label="eCPM karşılaştırması"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Dahili kullanım · Ocak–Mart 2026 · Tüm tutarlar TRY</div>
+</div>
+
+<script>
+var DATA = [
+  {b:'hurriyet',p:'android',f:'banner',m:'jan',r:245529,ax:43493,e:20.28,ae:9.45},
+  {b:'hurriyet',p:'android',f:'banner',m:'feb',r:175796,ax:52046,e:17.78,ae:11.74},
+  {b:'hurriyet',p:'android',f:'banner',m:'mar',r:154005,ax:44468,e:27.46,ae:15.21},
+  {b:'hurriyet',p:'ios',f:'banner',m:'jan',r:130812,ax:39328,e:15.55,ae:4.88},
+  {b:'hurriyet',p:'ios',f:'banner',m:'feb',r:112787,ax:36332,e:12.79,ae:5.98},
+  {b:'hurriyet',p:'ios',f:'banner',m:'mar',r:61971,ax:34039,e:14.06,ae:6.25},
+  {b:'hurriyet',p:'android',f:'interstitial',m:'jan',r:62254,ax:56301,e:107.86,ae:118.25},
+  {b:'hurriyet',p:'android',f:'interstitial',m:'feb',r:58422,ax:53720,e:114.02,ae:121.50},
+  {b:'hurriyet',p:'android',f:'interstitial',m:'mar',r:44094,ax:38148,e:119.53,ae:129.26},
+  {b:'hurriyet',p:'ios',f:'interstitial',m:'jan',r:84903,ax:82627,e:95.48,ae:97.15},
+  {b:'hurriyet',p:'ios',f:'interstitial',m:'feb',r:68188,ax:65963,e:85.32,ae:85.97},
+  {b:'hurriyet',p:'ios',f:'interstitial',m:'mar',r:49939,ax:46727,e:96.65,ae:97.33},
+  {b:'hurriyet',p:'android',f:'video',m:'jan',r:5446,ax:30,e:152.75,ae:5.13},
+  {b:'hurriyet',p:'android',f:'video',m:'feb',r:3107,ax:24,e:104.64,ae:5.63},
+  {b:'hurriyet',p:'android',f:'video',m:'mar',r:2223,ax:23,e:33.32,ae:4.42},
+  {b:'hurriyet',p:'ios',f:'video',m:'jan',r:7719,ax:20,e:157.96,ae:5.02},
+  {b:'hurriyet',p:'ios',f:'video',m:'feb',r:889,ax:16,e:56.64,ae:6.97},
+  {b:'hurriyet',p:'ios',f:'video',m:'mar',r:504,ax:11,e:21.01,ae:6.48},
+  {b:'milliyet',p:'android',f:'banner',m:'jan',r:64037,ax:12069,e:25.02,ae:8.68},
+  {b:'milliyet',p:'android',f:'banner',m:'feb',r:53432,ax:11607,e:27.91,ae:11.60},
+  {b:'milliyet',p:'android',f:'banner',m:'mar',r:38387,ax:10701,e:24.37,ae:15.58},
+  {b:'milliyet',p:'ios',f:'banner',m:'jan',r:71418,ax:1525,e:11.06,ae:1.31},
+  {b:'milliyet',p:'ios',f:'banner',m:'feb',r:61593,ax:1950,e:12.67,ae:3.28},
+  {b:'milliyet',p:'ios',f:'banner',m:'mar',r:41979,ax:2110,e:12.10,ae:4.32},
+  {b:'milliyet',p:'android',f:'interstitial',m:'jan',r:10818,ax:9364,e:53.76,ae:78.47},
+  {b:'milliyet',p:'android',f:'interstitial',m:'feb',r:11199,ax:9366,e:103.10,ae:121.49},
+  {b:'milliyet',p:'android',f:'interstitial',m:'mar',r:9416,ax:8215,e:80.66,ae:94.13},
+  {b:'milliyet',p:'ios',f:'interstitial',m:'jan',r:18312,ax:14905,e:43.88,ae:19.24},
+  {b:'milliyet',p:'ios',f:'interstitial',m:'feb',r:20595,ax:16920,e:51.36,ae:29.96},
+  {b:'milliyet',p:'ios',f:'interstitial',m:'mar',r:15562,ax:12580,e:54.44,ae:38.63},
+  {b:'fanatik',p:'android',f:'banner',m:'jan',r:79978,ax:32617,e:12.21,ae:7.49},
+  {b:'fanatik',p:'android',f:'banner',m:'feb',r:56630,ax:24688,e:12.58,ae:8.17},
+  {b:'fanatik',p:'android',f:'banner',m:'mar',r:40188,ax:15264,e:16.01,ae:13.95},
+  {b:'fanatik',p:'ios',f:'banner',m:'jan',r:80935,ax:27988,e:11.82,ae:9.00},
+  {b:'fanatik',p:'ios',f:'banner',m:'feb',r:66941,ax:24790,e:13.13,ae:12.27},
+  {b:'fanatik',p:'ios',f:'banner',m:'mar',r:51680,ax:16773,e:12.55,ae:10.98},
+  {b:'fanatik',p:'android',f:'interstitial',m:'jan',r:37804,ax:37576,e:142.30,ae:142.36},
+  {b:'fanatik',p:'android',f:'interstitial',m:'feb',r:30195,ax:30021,e:69.85,ae:70.04},
+  {b:'fanatik',p:'android',f:'interstitial',m:'mar',r:17791,ax:17767,e:60.34,ae:60.38},
+  {b:'fanatik',p:'ios',f:'interstitial',m:'jan',r:49266,ax:49159,e:114.09,ae:114.09},
+  {b:'fanatik',p:'ios',f:'interstitial',m:'feb',r:42579,ax:42330,e:197.86,ae:197.92},
+  {b:'fanatik',p:'ios',f:'interstitial',m:'mar',r:19012,ax:18888,e:193.94,ae:201.40},
+  {b:'fanatik',p:'android',f:'video',m:'jan',r:301,ax:22,e:13.74,ae:4.22},
+  {b:'fanatik',p:'android',f:'video',m:'feb',r:2020,ax:24,e:61.56,ae:6.22},
+  {b:'fanatik',p:'android',f:'video',m:'mar',r:599,ax:8,e:38.53,ae:5.97},
+  {b:'fanatik',p:'ios',f:'video',m:'jan',r:314,ax:30,e:10.12,ae:5.61},
+  {b:'fanatik',p:'ios',f:'video',m:'feb',r:1727,ax:43,e:114.37,ae:5.56},
+  {b:'fanatik',p:'ios',f:'video',m:'mar',r:1129,ax:34,e:31.51,ae:11.92},
+  {b:'posta',p:'android',f:'banner',m:'jan',r:10169,ax:1113,e:20.90,ae:4.85},
+  {b:'posta',p:'android',f:'banner',m:'feb',r:4670,ax:1221,e:13.87,ae:6.78},
+  {b:'posta',p:'android',f:'banner',m:'mar',r:3431,ax:679,e:17.99,ae:9.83},
+  {b:'posta',p:'ios',f:'banner',m:'jan',r:5756,ax:576,e:24.31,ae:7.07},
+  {b:'posta',p:'ios',f:'banner',m:'feb',r:2463,ax:574,e:13.42,ae:8.85},
+  {b:'posta',p:'ios',f:'banner',m:'mar',r:2440,ax:379,e:26.55,ae:13.24},
+  {b:'posta',p:'android',f:'interstitial',m:'jan',r:937,ax:790,e:11.14,ae:11.08},
+  {b:'posta',p:'android',f:'interstitial',m:'feb',r:880,ax:824,e:13.60,ae:13.84},
+  {b:'posta',p:'android',f:'interstitial',m:'mar',r:750,ax:563,e:16.62,ae:16.65},
+  {b:'posta',p:'ios',f:'interstitial',m:'feb',r:6,ax:0,e:12.08,ae:0},
+  {b:'cnnturk',p:'android',f:'banner',m:'jan',r:65109,ax:3091,e:6.57,ae:1.97},
+  {b:'cnnturk',p:'android',f:'banner',m:'feb',r:42770,ax:2560,e:7.77,ae:2.05},
+  {b:'cnnturk',p:'android',f:'banner',m:'mar',r:63750,ax:2564,e:12.35,ae:2.68},
+  {b:'cnnturk',p:'ios',f:'banner',m:'jan',r:93076,ax:4695,e:7.64,ae:2.80},
+  {b:'cnnturk',p:'ios',f:'banner',m:'feb',r:59979,ax:4260,e:8.95,ae:2.43},
+  {b:'cnnturk',p:'ios',f:'banner',m:'mar',r:61795,ax:4805,e:9.61,ae:5.36},
+  {b:'cnnturk',p:'android',f:'interstitial',m:'jan',r:7341,ax:5114,e:40.25,ae:21.30},
+  {b:'cnnturk',p:'android',f:'interstitial',m:'feb',r:5215,ax:4531,e:20.90,ae:20.37},
+  {b:'cnnturk',p:'android',f:'interstitial',m:'mar',r:8928,ax:6578,e:35.35,ae:33.13},
+  {b:'cnnturk',p:'ios',f:'interstitial',m:'jan',r:5629,ax:3668,e:27.80,ae:19.85},
+  {b:'cnnturk',p:'ios',f:'interstitial',m:'feb',r:3885,ax:3169,e:16.07,ae:13.82},
+  {b:'cnnturk',p:'ios',f:'interstitial',m:'mar',r:6022,ax:3415,e:42.71,ae:28.12},
+  {b:'cnnturk',p:'android',f:'video',m:'jan',r:27464,ax:7,e:251.21,ae:12.58},
+  {b:'cnnturk',p:'android',f:'video',m:'feb',r:41296,ax:7,e:305.18,ae:8.33},
+  {b:'cnnturk',p:'android',f:'video',m:'mar',r:10389,ax:2,e:175.00,ae:3.24},
+  {b:'cnnturk',p:'ios',f:'video',m:'jan',r:13233,ax:147,e:172.73,ae:5.98},
+  {b:'cnnturk',p:'ios',f:'video',m:'feb',r:11194,ax:138,e:224.03,ae:4.15},
+  {b:'cnnturk',p:'ios',f:'video',m:'mar',r:18108,ax:252,e:102.26,ae:11.26},
+  {b:'kanald',p:'android',f:'banner',m:'jan',r:61380,ax:15344,e:20.57,ae:13.37},
+  {b:'kanald',p:'android',f:'banner',m:'feb',r:47714,ax:19055,e:17.27,ae:13.08},
+  {b:'kanald',p:'android',f:'banner',m:'mar',r:34347,ax:11561,e:21.61,ae:16.41},
+  {b:'kanald',p:'ios',f:'banner',m:'jan',r:42689,ax:15120,e:31.27,ae:23.09},
+  {b:'kanald',p:'ios',f:'banner',m:'feb',r:36361,ax:18714,e:24.25,ae:21.54},
+  {b:'kanald',p:'ios',f:'banner',m:'mar',r:22136,ax:8278,e:24.96,ae:20.94},
+  {b:'kanald',p:'android',f:'interstitial',m:'jan',r:48261,ax:48261,e:33.95,ae:33.95},
+  {b:'kanald',p:'android',f:'interstitial',m:'feb',r:52006,ax:51975,e:39.12,ae:33.42},
+  {b:'kanald',p:'android',f:'interstitial',m:'mar',r:36173,ax:36172,e:39.24,ae:39.22},
+  {b:'kanald',p:'ios',f:'interstitial',m:'jan',r:63324,ax:63324,e:35.58,ae:35.58},
+  {b:'kanald',p:'ios',f:'interstitial',m:'feb',r:70365,ax:70259,e:49.65,ae:49.90},
+  {b:'kanald',p:'ios',f:'interstitial',m:'mar',r:34254,ax:34149,e:46.76,ae:40.49},
+  {b:'kanald',p:'android',f:'video',m:'jan',r:335358,ax:17961,e:129.34,ae:15.97},
+  {b:'kanald',p:'android',f:'video',m:'feb',r:533148,ax:30974,e:179.11,ae:22.09},
+  {b:'kanald',p:'android',f:'video',m:'mar',r:452981,ax:12983,e:143.25,ae:25.74},
+  {b:'kanald',p:'ios',f:'video',m:'jan',r:370377,ax:13698,e:136.28,ae:19.59},
+  {b:'kanald',p:'ios',f:'video',m:'feb',r:412045,ax:21450,e:156.72,ae:26.43},
+  {b:'kanald',p:'ios',f:'video',m:'mar',r:267198,ax:17373,e:147.35,ae:37.12}
+];
+
+var BL = {hurriyet:'Hürriyet',milliyet:'Milliyet',fanatik:'Fanatik',posta:'Posta',cnnturk:'CNN Türk',kanald:'Kanal D'};
+var ML = {jan:'Ocak',feb:'Şubat',mar:'Mart'};
+var FL = {banner:'Banner',interstitial:'Interstitial',video:'Video'};
+var BRANDS = ['hurriyet','milliyet','fanatik','posta','cnnturk','kanald'];
+var FMTS   = ['banner','interstitial','video'];
+var FC = {banner:'#2A5FD4',interstitial:'#6B5CE7',video:'#2E8A4A'};
+var PC = {android:'#1D9E75',ios:'#534AB7'};
+var sel = {month:'all',brand:'all',format:'all',platform:'all'};
+var ch1=null,ch2=null;
+
+document.querySelectorAll('.btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var t=btn.dataset.t,v=btn.dataset.v;
+    sel[t]=v;
+    document.querySelectorAll('.btn[data-t="'+t+'"]').forEach(function(b){b.classList.remove('on');});
+    btn.classList.add('on');
+    render();
+  });
+});
+
+function filtered(){
+  return DATA.filter(function(r){
+    return (sel.month==='all'||r.m===sel.month)&&
+           (sel.brand==='all'||r.b===sel.brand)&&
+           (sel.format==='all'||r.f===sel.format)&&
+           (sel.platform==='all'||r.p===sel.platform);
+  });
+}
+
+function T(v){return '₺'+Math.round(v).toLocaleString('tr-TR');}
+function E(v){return '₺'+v.toFixed(2);}
+function Big(v){return v>=1e6?'₺'+(v/1e6).toFixed(2)+'M':T(v);}
+function Pct(r,a){return r>0?Math.round(a/r*100)+'%':'-';}
+function s(arr,k){return arr.reduce(function(t,x){return t+x[k];},0);}
+function av(arr,k){return arr.length?s(arr,k)/arr.length:0;}
+
+function render(){
+  var f=filtered();
+  var tot=s(f,'r'),adxt=s(f,'ax');
+  var topF=FMTS.map(function(ft){return{ft:ft,v:s(f.filter(function(r){return r.f===ft;}),'r')};}).sort(function(a,b){return b.v-a.v;})[0];
+  var best=f.reduce(function(b,r){return(!b||r.e>b.e)?r:b;},null);
+
+  document.getElementById('cards').innerHTML=
+    '<div class="card"><p class="card-label">Toplam Gelir</p><p class="card-value">'+Big(tot)+'</p><p class="card-sub">seçili filtre</p></div>'+
+    '<div class="card"><p class="card-label">ADX Oranı</p><p class="card-value">'+(tot>0?Math.round(adxt/tot*100)+'%':'-')+'</p><p class="card-sub">'+T(adxt)+'</p></div>'+
+    '<div class="card"><p class="card-label">En Yüksek Format</p><p class="card-value" style="font-size:18px">'+(topF?FL[topF.ft]:'-')+'</p><p class="card-sub">'+(topF?Big(topF.v):'')+'</p></div>'+
+    '<div class="card"><p class="card-label">En Yüksek eCPM</p><p class="card-value" style="font-size:18px">'+(best?E(best.e):'-')+'</p><p class="card-sub">'+(best?BL[best.b]+' · '+best.p:'')+'</p></div>';
+
+  var tbody=document.getElementById('tbody');
+  if(!f.length){tbody.innerHTML='<tr><td colspan="9" class="empty">Veri bulunamadı</td></tr>';}
+  else tbody.innerHTML=f.map(function(r){
+    return '<tr>'+
+      '<td><span class="brand-strong">'+BL[r.b]+'</span></td>'+
+      '<td><span class="dot '+(r.p==='android'?'da':'di')+'"></span>'+(r.p==='android'?'Android':'iOS')+'</td>'+
+      '<td><span class="badge '+(r.f==='banner'?'bn':r.f==='interstitial'?'bi':'bv')+'">'+FL[r.f]+'</span></td>'+
+      '<td>'+ML[r.m]+'</td>'+
+      '<td class="r">'+T(r.r)+'</td>'+
+      '<td class="r">'+T(r.ax)+'</td>'+
+      '<td class="r">'+Pct(r.r,r.ax)+'</td>'+
+      '<td class="r">'+E(r.e)+'</td>'+
+      '<td class="r">'+E(r.ae)+'</td>'+
+    '</tr>';
+  }).join('');
+
+  var bLabels=BRANDS.map(function(b){return BL[b];});
+  var onlyFmt=sel.format!=='all',onlyPlat=sel.platform!=='all';
+  var revDS,ecDS,leg1,leg2;
+
+  if(onlyFmt&&onlyPlat){
+    var c=PC[sel.platform];
+    revDS=[{label:FL[sel.format],data:BRANDS.map(function(b){return s(f.filter(function(r){return r.b===b;}),'r');}),backgroundColor:c,borderRadius:4}];
+    ecDS=[{label:'eCPM',data:BRANDS.map(function(b){var x=f.filter(function(r){return r.b===b;});return x.length?+av(x,'e').toFixed(2):0;}),backgroundColor:c,borderRadius:4}];
+    leg1='<span class="li"><span class="ls" style="background:'+c+'"></span>'+(sel.platform==='android'?'Android':'iOS')+'</span>';
+    leg2=leg1;
+  } else if(onlyFmt){
+    revDS=['android','ios'].map(function(pl){return{label:pl==='android'?'Android':'iOS',data:BRANDS.map(function(b){return s(f.filter(function(r){return r.b===b&&r.p===pl;}),'r');}),backgroundColor:PC[pl],borderRadius:4};});
+    ecDS=['android','ios'].map(function(pl){return{label:(pl==='android'?'Android':'iOS'),data:BRANDS.map(function(b){var x=f.filter(function(r){return r.b===b&&r.p===pl;});return x.length?+av(x,'e').toFixed(2):0;}),backgroundColor:PC[pl],borderRadius:4};});
+    leg1='<span class="li"><span class="ls" style="background:'+PC.android+'"></span>Android</span><span class="li"><span class="ls" style="background:'+PC.ios+'"></span>iOS</span>';
+    leg2=leg1;
+  } else if(onlyPlat){
+    revDS=FMTS.map(function(ft){return{label:FL[ft],data:BRANDS.map(function(b){return s(f.filter(function(r){return r.b===b&&r.f===ft;}),'r');}),backgroundColor:FC[ft],borderRadius:4};});
+    ecDS=FMTS.map(function(ft){return{label:FL[ft],data:BRANDS.map(function(b){var x=f.filter(function(r){return r.b===b&&r.f===ft;});return x.length?+av(x,'e').toFixed(2):0;}),backgroundColor:FC[ft],borderRadius:4};});
+    leg1=FMTS.map(function(ft){return'<span class="li"><span class="ls" style="background:'+FC[ft]+'"></span>'+FL[ft]+'</span>';}).join('');
+    leg2=leg1;
+  } else {
+    revDS=FMTS.map(function(ft){return{label:FL[ft],data:BRANDS.map(function(b){return s(f.filter(function(r){return r.b===b&&r.f===ft;}),'r');}),backgroundColor:FC[ft],borderRadius:4};});
+    ecDS=FMTS.map(function(ft){return{label:FL[ft],data:BRANDS.map(function(b){var x=f.filter(function(r){return r.b===b&&r.f===ft;});return x.length?+av(x,'e').toFixed(2):0;}),backgroundColor:FC[ft],borderRadius:4};});
+    leg1=FMTS.map(function(ft){return'<span class="li"><span class="ls" style="background:'+FC[ft]+'"></span>'+FL[ft]+'</span>';}).join('');
+    leg2=leg1;
+  }
+
+  document.getElementById('leg1').innerHTML=leg1;
+  document.getElementById('leg2').innerHTML=leg2;
+
+  var xCfg={grid:{display:false},ticks:{font:{size:11},color:'#7A7870'}};
+  var opts=function(yCb){return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:xCfg,y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10},color:'#7A7870',callback:yCb}}}};};
+
+  if(ch1)ch1.destroy();
+  if(ch2)ch2.destroy();
+  ch1=new Chart(document.getElementById('c1'),{type:'bar',data:{labels:bLabels,datasets:revDS},options:opts(function(v){return v>=1e6?'₺'+(v/1e6).toFixed(1)+'M':v>=1000?'₺'+(v/1000).toFixed(0)+'K':'₺'+v;})});
+  ch2=new Chart(document.getElementById('c2'),{type:'bar',data:{labels:bLabels,datasets:ecDS},options:opts(function(v){return'₺'+v;})});
+}
+
+render();
+</script>
+</body>
+</html>
