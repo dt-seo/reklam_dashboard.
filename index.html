@@ -318,12 +318,13 @@ fetch('data.json?v=' + Date.now())
     DATA = (json.rows || []).map(function(r){
       return {
         b:r.b, p:r.p, f:r.f, y:r.y, m:r.m,
-        r:+r.r||0, ax:+r.ax||0, e:+r.e||0, ae:+r.ae||0
+        r:+r.r||0, ax:+r.ax||0, e:+r.e||0, ae:+r.ae||0,
+        imp:+r.imp||0, aimp:+r.aimp||0
       };
     });
     YEARS = Array.from(new Set(DATA.map(function(r){return r.y;}))).sort();
     if (!YEARS.length) { showError('Veri boş görünüyor.'); return; }
-    sel.year = YEARS[YEARS.length - 1]; // en güncel yıl
+    sel.year = YEARS[YEARS.length - 1];
     initUI();
     render();
   })
@@ -337,7 +338,7 @@ function showError(msg){
 }
 
 // ============================================================
-// 2) UI'ı KUR (filtre satırları + boş kart/tablo iskeleti)
+// 2) UI'ı KUR
 // ============================================================
 function initUI(){
   var yearBtns = YEARS.map(function(y){
@@ -398,10 +399,8 @@ function initUI(){
     '</div>' +
     '<div class="footer">Dahili kullanım · Tüm tutarlar TRY</div>';
 
-  // Header rozeti: yılın aylarına göre aralık metni
   updateHeaderBadge();
 
-  // Buton click dinleyicileri
   document.querySelectorAll('.btn').forEach(function(btn){
     btn.addEventListener('click', function(){
       var t = btn.dataset.t, v = btn.dataset.v;
@@ -448,17 +447,30 @@ function Pct(r,a){return r>0?Math.round(a/r*100)+'%':'-';}
 function s(arr,k){return arr.reduce(function(t,x){return t+x[k];},0);}
 function av(arr,k){return arr.length?s(arr,k)/arr.length:0;}
 
+// Seçili filtreye göre kaç ay var (Aylık Ortalama için)
+function monthCount(f){
+  return new Set(f.map(function(r){return r.m;})).size;
+}
+
+// Ağırlıklı ortalama eCPM = (toplam gelir / toplam gösterim) × 1000
+function weightedEcpm(f, revKey, impKey){
+  var totalRev = s(f, revKey);
+  var totalImp = s(f, impKey);
+  return totalImp > 0 ? (totalRev / totalImp) * 1000 : 0;
+}
+
 function render(){
   var f=filtered();
   var tot=s(f,'r'),adxt=s(f,'ax');
-  var topF=FMTS.map(function(ft){return{ft:ft,v:s(f.filter(function(r){return r.f===ft;}),'r')};}).sort(function(a,b){return b.v-a.v;})[0];
-  var best=f.reduce(function(b,r){return(!b||r.e>b.e)?r:b;},null);
+  var mc = monthCount(f);
+  var avgMonthly = mc > 0 ? tot / mc : 0;
+  var avgEcpm = weightedEcpm(f, 'r', 'imp');
 
   document.getElementById('cards').innerHTML=
     '<div class="card"><p class="card-label">Toplam Gelir</p><p class="card-value">'+Big(tot)+'</p><p class="card-sub">seçili filtre</p></div>'+
+    '<div class="card"><p class="card-label">Aylık Ortalama Gelir</p><p class="card-value">'+Big(avgMonthly)+'</p><p class="card-sub">'+mc+' ay</p></div>'+
     '<div class="card"><p class="card-label">ADX Oranı</p><p class="card-value">'+(tot>0?Math.round(adxt/tot*100)+'%':'-')+'</p><p class="card-sub">'+T(adxt)+'</p></div>'+
-    '<div class="card"><p class="card-label">En Yüksek Format</p><p class="card-value" style="font-size:18px">'+(topF&&topF.v>0?FL[topF.ft]:'-')+'</p><p class="card-sub">'+(topF&&topF.v>0?Big(topF.v):'')+'</p></div>'+
-    '<div class="card"><p class="card-label">En Yüksek eCPM</p><p class="card-value" style="font-size:18px">'+(best?E(best.e):'-')+'</p><p class="card-sub">'+(best?BL[best.b]+' · '+best.p:'')+'</p></div>';
+    '<div class="card"><p class="card-label">Ortalama eCPM</p><p class="card-value">'+(avgEcpm>0?E(avgEcpm):'-')+'</p><p class="card-sub">ağırlıklı</p></div>';
 
   var tbody=document.getElementById('tbody');
   if(!f.length){tbody.innerHTML='<tr><td colspan="9" class="empty">Veri bulunamadı</td></tr>';}
@@ -480,25 +492,31 @@ function render(){
   var onlyFmt=sel.format!=='all',onlyPlat=sel.platform!=='all';
   var revDS,ecDS,leg1,leg2;
 
+  // Grafiklerde eCPM: ağırlıklı ortalama hesabıyla
+  function ecpmForGroup(arr){
+    var rv = s(arr, 'r'), ip = s(arr, 'imp');
+    return ip > 0 ? +((rv/ip)*1000).toFixed(2) : 0;
+  }
+
   if(onlyFmt&&onlyPlat){
     var c=PC[sel.platform];
     revDS=[{label:FL[sel.format],data:BRANDS.map(function(b){return s(f.filter(function(r){return r.b===b;}),'r');}),backgroundColor:c,borderRadius:4}];
-    ecDS=[{label:'eCPM',data:BRANDS.map(function(b){var x=f.filter(function(r){return r.b===b;});return x.length?+av(x,'e').toFixed(2):0;}),backgroundColor:c,borderRadius:4}];
+    ecDS=[{label:'eCPM',data:BRANDS.map(function(b){return ecpmForGroup(f.filter(function(r){return r.b===b;}));}),backgroundColor:c,borderRadius:4}];
     leg1='<span class="li"><span class="ls" style="background:'+c+'"></span>'+(sel.platform==='android'?'Android':'iOS')+'</span>';
     leg2=leg1;
   } else if(onlyFmt){
     revDS=['android','ios'].map(function(pl){return{label:pl==='android'?'Android':'iOS',data:BRANDS.map(function(b){return s(f.filter(function(r){return r.b===b&&r.p===pl;}),'r');}),backgroundColor:PC[pl],borderRadius:4};});
-    ecDS=['android','ios'].map(function(pl){return{label:(pl==='android'?'Android':'iOS'),data:BRANDS.map(function(b){var x=f.filter(function(r){return r.b===b&&r.p===pl;});return x.length?+av(x,'e').toFixed(2):0;}),backgroundColor:PC[pl],borderRadius:4};});
+    ecDS=['android','ios'].map(function(pl){return{label:(pl==='android'?'Android':'iOS'),data:BRANDS.map(function(b){return ecpmForGroup(f.filter(function(r){return r.b===b&&r.p===pl;}));}),backgroundColor:PC[pl],borderRadius:4};});
     leg1='<span class="li"><span class="ls" style="background:'+PC.android+'"></span>Android</span><span class="li"><span class="ls" style="background:'+PC.ios+'"></span>iOS</span>';
     leg2=leg1;
   } else if(onlyPlat){
     revDS=FMTS.map(function(ft){return{label:FL[ft],data:BRANDS.map(function(b){return s(f.filter(function(r){return r.b===b&&r.f===ft;}),'r');}),backgroundColor:FC[ft],borderRadius:4};});
-    ecDS=FMTS.map(function(ft){return{label:FL[ft],data:BRANDS.map(function(b){var x=f.filter(function(r){return r.b===b&&r.f===ft;});return x.length?+av(x,'e').toFixed(2):0;}),backgroundColor:FC[ft],borderRadius:4};});
+    ecDS=FMTS.map(function(ft){return{label:FL[ft],data:BRANDS.map(function(b){return ecpmForGroup(f.filter(function(r){return r.b===b&&r.f===ft;}));}),backgroundColor:FC[ft],borderRadius:4};});
     leg1=FMTS.map(function(ft){return'<span class="li"><span class="ls" style="background:'+FC[ft]+'"></span>'+FL[ft]+'</span>';}).join('');
     leg2=leg1;
   } else {
     revDS=FMTS.map(function(ft){return{label:FL[ft],data:BRANDS.map(function(b){return s(f.filter(function(r){return r.b===b&&r.f===ft;}),'r');}),backgroundColor:FC[ft],borderRadius:4};});
-    ecDS=FMTS.map(function(ft){return{label:FL[ft],data:BRANDS.map(function(b){var x=f.filter(function(r){return r.b===b&&r.f===ft;});return x.length?+av(x,'e').toFixed(2):0;}),backgroundColor:FC[ft],borderRadius:4};});
+    ecDS=FMTS.map(function(ft){return{label:FL[ft],data:BRANDS.map(function(b){return ecpmForGroup(f.filter(function(r){return r.b===b&&r.f===ft;}));}),backgroundColor:FC[ft],borderRadius:4};});
     leg1=FMTS.map(function(ft){return'<span class="li"><span class="ls" style="background:'+FC[ft]+'"></span>'+FL[ft]+'</span>';}).join('');
     leg2=leg1;
   }
