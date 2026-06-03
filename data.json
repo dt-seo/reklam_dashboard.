@@ -1,20 +1,10 @@
 {
   "meta": {
-    "updated": "2026-05-16T23:12:48.964Z",
-    "header_row": 10,
-    "total_rows": 136,
-    "skipped": 268,
+    "updated": "2026-06-03T07:50:49.095Z",
+    "header_row": 12,
+    "total_rows": 170,
+    "skipped": 337,
     "skipped_details": [
-      {
-        "row": 11,
-        "reason": "marka/platform yok",
-        "detail": "default"
-      },
-      {
-        "row": 12,
-        "reason": "marka/platform yok",
-        "detail": "default"
-      },
       {
         "row": 13,
         "reason": "marka/platform yok",
@@ -48,22 +38,22 @@
       {
         "row": 19,
         "reason": "marka/platform yok",
-        "detail": "kanald"
+        "detail": "default"
       },
       {
         "row": 20,
         "reason": "marka/platform yok",
-        "detail": "kanald"
+        "detail": "default"
       },
       {
         "row": 21,
         "reason": "marka/platform yok",
-        "detail": "kanald"
+        "detail": "default"
       },
       {
         "row": 22,
         "reason": "marka/platform yok",
-        "detail": "kanald"
+        "detail": "default"
       },
       {
         "row": 23,
@@ -77,6 +67,16 @@
       },
       {
         "row": 25,
+        "reason": "marka/platform yok",
+        "detail": "kanald"
+      },
+      {
+        "row": 26,
+        "reason": "marka/platform yok",
+        "detail": "kanald"
+      },
+      {
+        "row": 27,
         "reason": "marka/platform yok",
         "detail": "kanald"
       }
@@ -138,6 +138,19 @@
     {
       "b": "fanatik",
       "p": "android",
+      "f": "banner",
+      "y": 2026,
+      "m": "may",
+      "r": 81257.08,
+      "ax": 28545.43,
+      "e": 25.97,
+      "ae": 12.38,
+      "imp": 3128904,
+      "aimp": 2304915
+    },
+    {
+      "b": "fanatik",
+      "p": "android",
       "f": "interstitial",
       "y": 2026,
       "m": "apr",
@@ -190,6 +203,19 @@
     {
       "b": "fanatik",
       "p": "android",
+      "f": "interstitial",
+      "y": 2026,
+      "m": "may",
+      "r": 26322.24,
+      "ax": 24233.1,
+      "e": 126.98,
+      "ae": 148.28,
+      "imp": 207290,
+      "aimp": 163427
+    },
+    {
+      "b": "fanatik",
+      "p": "android",
       "f": "video",
       "y": 2026,
       "m": "jan",
@@ -238,6 +264,19 @@
       "ae": 2.3,
       "imp": 8681,
       "aimp": 875
+    },
+    {
+      "b": "fanatik",
+      "p": "android",
+      "f": "video",
+      "y": 2026,
+      "m": "may",
+      "r": 73.99,
+      "ax": 0,
+      "e": 4.58,
+      "ae": 0,
+      "imp": 16142,
+      "aimp": 0
     },
     {
       "b": "fanatik",
@@ -294,6 +333,19 @@
     {
       "b": "fanatik",
       "p": "ios",
+      "f": "banner",
+      "y": 2026,
+      "m": "may",
+      "r": 99521.95,
+      "ax": 24788.55,
+      "e": 17.37,
+      "ae": 5.45,
+      "imp": 5730601,
+      "aimp": 4547361
+    },
+    {
+      "b": "fanatik",
+      "p": "ios",
       "f": "interstitial",
       "y": 2026,
       "m": "jan",
@@ -346,6 +398,19 @@
     {
       "b": "fanatik",
       "p": "ios",
+      "f": "interstitial",
+      "y": 2026,
+      "m": "may",
+      "r": 34235.46,
+      "ax": 28848.09,
+      "e": 78.62,
+      "ae": 82.25,
+      "imp": 435465,
+      "aimp": 350732
+    },
+    {
+      "b": "fanatik",
+      "p": "ios",
       "f": "video",
       "y": 2026,
       "m": "jan",
@@ -394,6 +459,19 @@
       "ae": 7.82,
       "imp": 24332,
       "aimp": 2759
+    },
+    {
+      "b": "fanatik",
+      "p": "ios",
+      "f": "video",
+      "y": 2026,
+      "m": "may",
+      "r": 896.89,
+      "ax": 0,
+      "e": 18.17,
+      "ae": 0,
+      "imp": 49360,
+      "aimp": 3
     },
     {
       "b": "posta",
@@ -489,6 +567,19 @@
     {
       "b": "posta",
       "p": "android",
+      "f": "banner",
+      "y": 2026,
+      "m": "may",
+      "r": 6240.91,
+      "ax": 1036.3,
+      "e": 31.54,
+      "ae": 8.98,
+      "imp": 197862,
+      "aimp": 115438
+    },
+    {
+      "b": "posta",
+      "p": "android",
       "f": "interstitial",
       "y": 2026,
       "m": "feb",
@@ -498,6 +589,19 @@
       "ae": 69.2,
       "imp": 12956,
       "aimp": 11913
+    },
+    {
+      "b": "posta",
+      "p": "android",
+      "f": "interstitial",
+      "y": 2026,
+      "m": "may",
+      "r": 1340.39,
+      "ax": 828.59,
+      "e": 76.78,
+      "ae": 90.32,
+      "imp": 17457,
+      "aimp": 9174
     },
     {
       "b": "posta",
@@ -554,6 +658,19 @@
     {
       "b": "posta",
       "p": "ios",
+      "f": "interstitial",
+      "y": 2026,
+      "m": "may",
+      "r": 0.04,
+      "ax": 0.04,
+      "e": 40,
+      "ae": 40,
+      "imp": 1,
+      "aimp": 1
+    },
+    {
+      "b": "posta",
+      "p": "ios",
       "f": "banner",
       "y": 2026,
       "m": "jan",
@@ -602,6 +719,19 @@
       "ae": 12.92,
       "imp": 137630,
       "aimp": 58912
+    },
+    {
+      "b": "posta",
+      "p": "ios",
+      "f": "banner",
+      "y": 2026,
+      "m": "may",
+      "r": 4126.66,
+      "ax": 617.57,
+      "e": 30.78,
+      "ae": 11.5,
+      "imp": 134086,
+      "aimp": 53709
     },
     {
       "b": "milliyet",
@@ -658,6 +788,19 @@
     {
       "b": "milliyet",
       "p": "android",
+      "f": "interstitial",
+      "y": 2026,
+      "m": "may",
+      "r": 9891.49,
+      "ax": 7120.4,
+      "e": 84.58,
+      "ae": 102.33,
+      "imp": 116948,
+      "aimp": 69582
+    },
+    {
+      "b": "milliyet",
+      "p": "android",
       "f": "banner",
       "y": 2026,
       "m": "jan",
@@ -710,6 +853,19 @@
     {
       "b": "milliyet",
       "p": "android",
+      "f": "banner",
+      "y": 2026,
+      "m": "may",
+      "r": 65028.11,
+      "ax": 15290.13,
+      "e": 40.96,
+      "ae": 14.57,
+      "imp": 1587600,
+      "aimp": 1049438
+    },
+    {
+      "b": "milliyet",
+      "p": "android",
       "f": "video",
       "y": 2026,
       "m": "jan",
@@ -758,6 +914,19 @@
       "ae": 3.04,
       "imp": 16474,
       "aimp": 3043
+    },
+    {
+      "b": "milliyet",
+      "p": "android",
+      "f": "video",
+      "y": 2026,
+      "m": "may",
+      "r": 14,
+      "ax": 14,
+      "e": 0.66,
+      "ae": 4.4,
+      "imp": 21367,
+      "aimp": 3185
     },
     {
       "b": "milliyet",
@@ -814,6 +983,19 @@
     {
       "b": "milliyet",
       "p": "ios",
+      "f": "video",
+      "y": 2026,
+      "m": "may",
+      "r": 24.37,
+      "ax": 24.37,
+      "e": 2.51,
+      "ae": 3.66,
+      "imp": 9691,
+      "aimp": 6663
+    },
+    {
+      "b": "milliyet",
+      "p": "ios",
       "f": "banner",
       "y": 2026,
       "m": "jan",
@@ -866,6 +1048,19 @@
     {
       "b": "milliyet",
       "p": "ios",
+      "f": "banner",
+      "y": 2026,
+      "m": "may",
+      "r": 84358.38,
+      "ax": 2175.1,
+      "e": 36.65,
+      "ae": 4.15,
+      "imp": 2301808,
+      "aimp": 523605
+    },
+    {
+      "b": "milliyet",
+      "p": "ios",
       "f": "interstitial",
       "y": 2026,
       "m": "jan",
@@ -914,6 +1109,19 @@
       "ae": 74.74,
       "imp": 282930,
       "aimp": 237377
+    },
+    {
+      "b": "milliyet",
+      "p": "ios",
+      "f": "interstitial",
+      "y": 2026,
+      "m": "may",
+      "r": 18018.31,
+      "ax": 11801.23,
+      "e": 70.14,
+      "ae": 71.54,
+      "imp": 256896,
+      "aimp": 164963
     },
     {
       "b": "kanald",
@@ -970,6 +1178,19 @@
     {
       "b": "kanald",
       "p": "ios",
+      "f": "video",
+      "y": 2026,
+      "m": "may",
+      "r": 430678.61,
+      "ax": 18242.45,
+      "e": 207.63,
+      "ae": 33.86,
+      "imp": 2074292,
+      "aimp": 538783
+    },
+    {
+      "b": "kanald",
+      "p": "ios",
       "f": "banner",
       "y": 2026,
       "m": "jan",
@@ -1022,6 +1243,19 @@
     {
       "b": "kanald",
       "p": "ios",
+      "f": "banner",
+      "y": 2026,
+      "m": "may",
+      "r": 17075.49,
+      "ax": 12430.67,
+      "e": 17.22,
+      "ae": 14.13,
+      "imp": 991333,
+      "aimp": 879540
+    },
+    {
+      "b": "kanald",
+      "p": "ios",
       "f": "interstitial",
       "y": 2026,
       "m": "jan",
@@ -1070,6 +1304,19 @@
       "ae": 128.33,
       "imp": 308332,
       "aimp": 296605
+    },
+    {
+      "b": "kanald",
+      "p": "ios",
+      "f": "interstitial",
+      "y": 2026,
+      "m": "may",
+      "r": 39137.96,
+      "ax": 38261.02,
+      "e": 139.62,
+      "ae": 140.93,
+      "imp": 280312,
+      "aimp": 271496
     },
     {
       "b": "kanald",
@@ -1126,6 +1373,19 @@
     {
       "b": "kanald",
       "p": "android",
+      "f": "video",
+      "y": 2026,
+      "m": "may",
+      "r": 728289.97,
+      "ax": 15148.27,
+      "e": 175.07,
+      "ae": 17.81,
+      "imp": 4160100,
+      "aimp": 850314
+    },
+    {
+      "b": "kanald",
+      "p": "android",
       "f": "banner",
       "y": 2026,
       "m": "jan",
@@ -1178,6 +1438,19 @@
     {
       "b": "kanald",
       "p": "android",
+      "f": "banner",
+      "y": 2026,
+      "m": "may",
+      "r": 22720.92,
+      "ax": 12177.66,
+      "e": 11.1,
+      "ae": 6.78,
+      "imp": 2046878,
+      "aimp": 1796344
+    },
+    {
+      "b": "kanald",
+      "p": "android",
       "f": "interstitial",
       "y": 2026,
       "m": "jan",
@@ -1226,6 +1499,19 @@
       "ae": 121.31,
       "imp": 406573,
       "aimp": 398073
+    },
+    {
+      "b": "kanald",
+      "p": "android",
+      "f": "interstitial",
+      "y": 2026,
+      "m": "may",
+      "r": 51991.61,
+      "ax": 51991.33,
+      "e": 133.27,
+      "ae": 133.27,
+      "imp": 390131,
+      "aimp": 390127
     },
     {
       "b": "cnnturk",
@@ -1282,6 +1568,19 @@
     {
       "b": "cnnturk",
       "p": "ios",
+      "f": "interstitial",
+      "y": 2026,
+      "m": "may",
+      "r": 4532.43,
+      "ax": 25.35,
+      "e": 53.69,
+      "ae": 26.66,
+      "imp": 84411,
+      "aimp": 951
+    },
+    {
+      "b": "cnnturk",
+      "p": "ios",
       "f": "banner",
       "y": 2026,
       "m": "jan",
@@ -1334,6 +1633,19 @@
     {
       "b": "cnnturk",
       "p": "ios",
+      "f": "banner",
+      "y": 2026,
+      "m": "may",
+      "r": 104012.31,
+      "ax": 3895.94,
+      "e": 35.3,
+      "ae": 2.57,
+      "imp": 2946178,
+      "aimp": 1516740
+    },
+    {
+      "b": "cnnturk",
+      "p": "ios",
       "f": "video",
       "y": 2026,
       "m": "jan",
@@ -1382,6 +1694,19 @@
       "ae": 28.85,
       "imp": 82170,
       "aimp": 10019
+    },
+    {
+      "b": "cnnturk",
+      "p": "ios",
+      "f": "video",
+      "y": 2026,
+      "m": "may",
+      "r": 13304.47,
+      "ax": 92.32,
+      "e": 207.83,
+      "ae": 10.62,
+      "imp": 64016,
+      "aimp": 8689
     },
     {
       "b": "cnnturk",
@@ -1438,6 +1763,19 @@
     {
       "b": "cnnturk",
       "p": "android",
+      "f": "banner",
+      "y": 2026,
+      "m": "may",
+      "r": 54789.11,
+      "ax": 4082.4,
+      "e": 24.74,
+      "ae": 3.16,
+      "imp": 2214320,
+      "aimp": 1290721
+    },
+    {
+      "b": "cnnturk",
+      "p": "android",
       "f": "interstitial",
       "y": 2026,
       "m": "jan",
@@ -1490,6 +1828,19 @@
     {
       "b": "cnnturk",
       "p": "android",
+      "f": "interstitial",
+      "y": 2026,
+      "m": "may",
+      "r": 5338.9,
+      "ax": 0,
+      "e": 46.89,
+      "ae": 0,
+      "imp": 113848,
+      "aimp": 0
+    },
+    {
+      "b": "cnnturk",
+      "p": "android",
       "f": "video",
       "y": 2026,
       "m": "jan",
@@ -1538,6 +1889,19 @@
       "ae": 10.88,
       "imp": 18381,
       "aimp": 1889
+    },
+    {
+      "b": "cnnturk",
+      "p": "android",
+      "f": "video",
+      "y": 2026,
+      "m": "may",
+      "r": 63181.32,
+      "ax": 21.02,
+      "e": 333.36,
+      "ae": 2.46,
+      "imp": 189531,
+      "aimp": 8528
     },
     {
       "b": "hurriyet",
@@ -1594,6 +1958,19 @@
     {
       "b": "hurriyet",
       "p": "ios",
+      "f": "banner",
+      "y": 2026,
+      "m": "may",
+      "r": 70130.19,
+      "ax": 37343.41,
+      "e": 9.86,
+      "ae": 5.77,
+      "imp": 7113224,
+      "aimp": 6475580
+    },
+    {
+      "b": "hurriyet",
+      "p": "ios",
       "f": "interstitial",
       "y": 2026,
       "m": "jan",
@@ -1646,6 +2023,19 @@
     {
       "b": "hurriyet",
       "p": "ios",
+      "f": "interstitial",
+      "y": 2026,
+      "m": "may",
+      "r": 62848.19,
+      "ax": 57313.63,
+      "e": 96.57,
+      "ae": 96.96,
+      "imp": 650821,
+      "aimp": 591102
+    },
+    {
+      "b": "hurriyet",
+      "p": "ios",
       "f": "video",
       "y": 2026,
       "m": "jan",
@@ -1694,6 +2084,19 @@
       "ae": 2.74,
       "imp": 14953,
       "aimp": 6239
+    },
+    {
+      "b": "hurriyet",
+      "p": "ios",
+      "f": "video",
+      "y": 2026,
+      "m": "may",
+      "r": 233.25,
+      "ax": 18.93,
+      "e": 12.34,
+      "ae": 3.64,
+      "imp": 18895,
+      "aimp": 5201
     },
     {
       "b": "hurriyet",
@@ -1750,6 +2153,19 @@
     {
       "b": "hurriyet",
       "p": "android",
+      "f": "banner",
+      "y": 2026,
+      "m": "may",
+      "r": 172369.4,
+      "ax": 38293.13,
+      "e": 25.88,
+      "ae": 12.7,
+      "imp": 6660841,
+      "aimp": 3015459
+    },
+    {
+      "b": "hurriyet",
+      "p": "android",
       "f": "interstitial",
       "y": 2026,
       "m": "jan",
@@ -1802,6 +2218,19 @@
     {
       "b": "hurriyet",
       "p": "android",
+      "f": "interstitial",
+      "y": 2026,
+      "m": "may",
+      "r": 63198.81,
+      "ax": 53028.56,
+      "e": 122.19,
+      "ae": 139.03,
+      "imp": 517236,
+      "aimp": 381427
+    },
+    {
+      "b": "hurriyet",
+      "p": "android",
       "f": "video",
       "y": 2026,
       "m": "jan",
@@ -1850,6 +2279,19 @@
       "ae": 2.89,
       "imp": 42210,
       "aimp": 7044
+    },
+    {
+      "b": "hurriyet",
+      "p": "android",
+      "f": "video",
+      "y": 2026,
+      "m": "may",
+      "r": 9139.29,
+      "ax": 20.19,
+      "e": 115.51,
+      "ae": 4.57,
+      "imp": 79122,
+      "aimp": 4417
     }
   ]
 }
