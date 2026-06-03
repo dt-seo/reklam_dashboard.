@@ -43,7 +43,6 @@
     padding: 0;
   }
 
-  /* HEADER */
   .header {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
@@ -76,10 +75,8 @@
     color: var(--muted);
   }
 
-  /* LAYOUT */
   .container { max-width: 1200px; margin: 0 auto; padding: 2rem 2.5rem 4rem; }
 
-  /* FILTERS */
   .filters-panel {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -124,7 +121,6 @@
   .bf.on { background: var(--purple); color: #fff; border-color: var(--purple); }
   .bp.on { background: var(--orange); color: #fff; border-color: var(--orange); }
 
-  /* METRIC CARDS */
   .cards {
     display: grid;
     grid-template-columns: repeat(4, minmax(0,1fr));
@@ -156,7 +152,6 @@
     font-family: 'DM Mono', monospace;
   }
 
-  /* SECTION */
   .section { margin-bottom: 1.5rem; }
   .section-header {
     display: flex;
@@ -177,14 +172,13 @@
     background: var(--border);
   }
 
-  /* TABLE */
   .table-wrap {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
-    overflow: hidden;
+    overflow-x: auto;
   }
-  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 900px; }
   th {
     font-size: 10px;
     font-weight: 600;
@@ -195,14 +189,14 @@
     padding: 10px 14px;
     background: var(--surface2);
     border-bottom: 1px solid var(--border);
+    white-space: nowrap;
   }
   th.r { text-align: right; }
-  td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+  td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text); white-space: nowrap; }
   td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 12px; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--surface2); }
 
-  /* BADGES */
   .badge {
     display: inline-block;
     font-size: 11px;
@@ -221,7 +215,6 @@
   .da { background: var(--android); }
   .di { background: var(--ios); }
 
-  /* CHARTS */
   .charts-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -269,7 +262,6 @@
 
   .brand-strong { font-weight: 500; }
 
-  /* FOOTER */
   .footer {
     text-align: center;
     padding: 2rem 0 0;
@@ -309,9 +301,6 @@ var YEARS = [];
 var sel = {year:null,month:'all',brand:'all',format:'all',platform:'all'};
 var ch1=null, ch2=null;
 
-// ============================================================
-// 1) VERİ YÜKLE
-// ============================================================
 fetch('data.json?v=' + Date.now())
   .then(function(r){ if(!r.ok) throw new Error('data.json bulunamadı'); return r.json(); })
   .then(function(json){
@@ -337,9 +326,6 @@ function showError(msg){
   document.getElementById('headerBadge').textContent = 'Hata';
 }
 
-// ============================================================
-// 2) UI'ı KUR
-// ============================================================
 function initUI(){
   var yearBtns = YEARS.map(function(y){
     return '<button class="btn by'+(y===sel.year?' on':'')+'" data-t="year" data-v="'+y+'">'+y+'</button>';
@@ -379,7 +365,9 @@ function initUI(){
       '<div class="table-wrap"><table><thead><tr>' +
         '<th>Marka</th><th>Platform</th><th>Format</th><th>Ay</th>' +
         '<th class="r">Toplam Gelir</th><th class="r">ADX Gelir</th>' +
-        '<th class="r">ADX%</th><th class="r">eCPM</th><th class="r">ADX eCPM</th>' +
+        '<th class="r">ADX%</th>' +
+        '<th class="r">Toplam Gösterim</th>' +
+        '<th class="r">eCPM</th><th class="r">ADX eCPM</th>' +
       '</tr></thead><tbody id="tbody"></tbody></table></div>' +
     '</div>' +
     '<div class="section">' +
@@ -427,9 +415,6 @@ function updateHeaderBadge(){
   document.getElementById('headerBadge').textContent = text;
 }
 
-// ============================================================
-// 3) RENDER
-// ============================================================
 function filtered(){
   return DATA.filter(function(r){
     return  r.y === sel.year &&
@@ -444,15 +429,14 @@ function T(v){return '₺'+Math.round(v).toLocaleString('tr-TR');}
 function E(v){return '₺'+v.toFixed(2);}
 function Big(v){return v>=1e6?'₺'+(v/1e6).toFixed(2)+'M':T(v);}
 function Pct(r,a){return r>0?Math.round(a/r*100)+'%':'-';}
+function N(v){return v.toLocaleString('tr-TR');}
 function s(arr,k){return arr.reduce(function(t,x){return t+x[k];},0);}
 function av(arr,k){return arr.length?s(arr,k)/arr.length:0;}
 
-// Seçili filtreye göre kaç ay var (Aylık Ortalama için)
 function monthCount(f){
   return new Set(f.map(function(r){return r.m;})).size;
 }
 
-// Ağırlıklı ortalama eCPM = (toplam gelir / toplam gösterim) × 1000
 function weightedEcpm(f, revKey, impKey){
   var totalRev = s(f, revKey);
   var totalImp = s(f, impKey);
@@ -473,7 +457,7 @@ function render(){
     '<div class="card"><p class="card-label">Ortalama eCPM</p><p class="card-value">'+(avgEcpm>0?E(avgEcpm):'-')+'</p><p class="card-sub">ağırlıklı</p></div>';
 
   var tbody=document.getElementById('tbody');
-  if(!f.length){tbody.innerHTML='<tr><td colspan="9" class="empty">Veri bulunamadı</td></tr>';}
+  if(!f.length){tbody.innerHTML='<tr><td colspan="10" class="empty">Veri bulunamadı</td></tr>';}
   else tbody.innerHTML=f.map(function(r){
     return '<tr>'+
       '<td><span class="brand-strong">'+BL[r.b]+'</span></td>'+
@@ -483,6 +467,7 @@ function render(){
       '<td class="r">'+T(r.r)+'</td>'+
       '<td class="r">'+T(r.ax)+'</td>'+
       '<td class="r">'+Pct(r.r,r.ax)+'</td>'+
+      '<td class="r">'+N(r.imp)+'</td>'+
       '<td class="r">'+E(r.e)+'</td>'+
       '<td class="r">'+E(r.ae)+'</td>'+
     '</tr>';
@@ -492,7 +477,6 @@ function render(){
   var onlyFmt=sel.format!=='all',onlyPlat=sel.platform!=='all';
   var revDS,ecDS,leg1,leg2;
 
-  // Grafiklerde eCPM: ağırlıklı ortalama hesabıyla
   function ecpmForGroup(arr){
     var rv = s(arr, 'r'), ip = s(arr, 'imp');
     return ip > 0 ? +((rv/ip)*1000).toFixed(2) : 0;
